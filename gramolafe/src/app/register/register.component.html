@@ -1,0 +1,92 @@
+<div class="form-container" style="max-width: 500px;">
+  <h2 class="form-header">Crear Cuenta</h2>
+  <p class="form-subtitle">Registra tu bar en La Gramola y empieza la música</p>
+
+  <div *ngIf="registroOK" class="alert-success">
+    ⚠ Registro realizado con éxito. Revisa tu email para confirmar la cuenta.
+  </div>
+  
+  <div *ngIf="registroKO" class="error-message" style="margin-bottom: 20px; text-align: center; display: block;">
+    ⚠ Por favor, corrige los errores en el formulario antes de continuar.
+  </div>
+
+  <div class="form-body">
+    <div class="form-group">
+      <label>Nombre del Bar</label>
+      <span class="error-message" *ngIf="registroKO && !bar">⚠ El nombre es obligatorio</span> 
+      <input type="text" 
+             class="form-control" 
+             [(ngModel)]="bar" 
+             name="bar" 
+             [class.is-invalid]="registroKO && !bar"
+             placeholder="Ej: El Rincón de la Música">
+    </div>
+
+    <div class="form-group">
+      <label>Correo electrónico</label>
+      <span class="error-message" *ngIf="registroKO && (!email || !email.includes('@'))">⚠ Email no válido</span>
+      <input type="email" 
+             class="form-control" 
+             [(ngModel)]="email" 
+             name="email" 
+             [class.is-invalid]="registroKO && (!email || !email.includes('@'))"
+             placeholder="bar@ejemplo.com">
+    </div>
+
+    <div class="form-group">
+      <label>Spotify Client ID</label>
+      <span class="error-message" *ngIf="registroKO && !clientId">⚠ El ID de cliente es obligatorio</span>
+      <input type="text" 
+             class="form-control" 
+             [(ngModel)]="clientId" 
+             name="clientId" 
+             [class.is-invalid]="registroKO && !clientId"
+             placeholder="Tu ID de desarrollador">
+    </div>
+
+    <div class="form-group">
+      <label>Spotify Client Secret</label>
+      <span class="error-message" *ngIf="registroKO && !clientSecret">⚠ El secreto es obligatorio</span>
+      <input type="password" 
+             class="form-control" 
+             [(ngModel)]="clientSecret" 
+             name="clientSecret" 
+             [class.is-invalid]="registroKO && !clientSecret"
+             placeholder="••••••••••••">
+    </div>
+
+    <div class="form-group">
+      <label>Contraseña</label>
+      <span class="error-message" *ngIf="registroKO && (pwd1?.length ?? 0) < 8">⚠ Mínimo 8 caracteres</span>
+      <input type="password" 
+             class="form-control" 
+             [(ngModel)]="pwd1" 
+             name="password"
+             [class.is-invalid]="registroKO && (pwd1?.length ?? 0) < 8"
+             placeholder="Tu contraseña">
+    </div>
+
+    <div class="form-group">
+      <label>Confirmar Contraseña</label>
+      <span class="error-message" *ngIf="registroKO && (pwd1 !== pwd2)">⚠ Las contraseñas no coinciden</span>
+      <input type="password" 
+             class="form-control" 
+             [(ngModel)]="pwd2" 
+             name="confirmPassword" 
+             [class.is-invalid]="registroKO && (pwd1 !== pwd2)"
+             placeholder="Repite tu contraseña">
+    </div>
+
+    <button class="btn-primary" 
+            [class.shake-animation]="registroKO" 
+            (click)="registrar()">
+      Registrar Bar
+    </button>
+  </div>
+
+  <div class="text-center">
+    <p style="font-size: 14px; color: var(--text-dim);">
+      ¿Ya tienes cuenta? <a routerLink="/login" class="form-link">Inicia sesión aquí</a>
+    </p>
+  </div>
+</div>

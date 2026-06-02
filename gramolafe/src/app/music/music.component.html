@@ -1,0 +1,48 @@
+<div [class.hidden]="!isVisible">
+  <footer class="player-bar glass-panel">
+    <div class="now-playing">
+      @if (albumArt) {
+        <img [src]="albumArt" alt="Portada del álbum" class="album-cover" />
+      } @else {
+        <div class="album-placeholder">🎵</div>
+      }
+
+      <div class="track-info">
+        <span class="title">{{ title }}</span>
+        <span class="artist">{{ artist }}</span>
+      </div>
+    </div>
+
+    <div class="center-section">
+      <div class="buttons">
+        <button class="control-btn hidden-mobile" (click)="previousTrack()">⏮</button>
+        <button class="control-btn play-btn" (click)="togglePlay()">
+          <span class="play-icon-fix">{{ isPaused ? '▶' : '⏸' }}</span>
+        </button>
+        <button class="control-btn" (click)="nextTrack()">⏭</button>
+      </div>
+
+      <div class="progress-container">
+        <span class="time-text">{{ formatearTiempo(progresoMs) }}</span>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" [style.width.%]="progresoPorcentaje"></div>
+        </div>
+        <span class="time-text">{{ formatearTiempo(duracionMs) }}</span>
+      </div>
+    </div>
+
+    <div class="volume-control hidden-mobile">
+      <span>🔊</span>
+      <input
+        type="range"
+        class="volume-slider"
+        min="0"
+        max="1"
+        step="0.01"
+        [value]="volumen"
+        (input)="cambiarVolumen($event)"
+        [style.--vol-pct]="volumen * 100 + '%'"
+      />
+    </div>
+  </footer>
+</div>

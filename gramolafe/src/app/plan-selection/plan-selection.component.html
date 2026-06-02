@@ -1,0 +1,25 @@
+<div style="text-align: center; width: 100%; max-width: 1000px; margin: 40px auto; padding: 0 20px;">
+  
+  <h2 class="form-header" style="font-size: 36px;">Suscripción a La Gramola</h2>
+  <p class="form-subtitle" style="font-size: 18px;">Estás a un solo paso de llevar la mejor música a tu bar.</p>
+
+  <div class="cards-wrapper">
+    
+    <div *ngFor="let plan of plans" class="plan-card">
+      
+      <div>
+        <h3 class="plan-title">{{ plan.name }}</h3>
+        
+        <div class="plan-price">
+          {{ plan.price }}<span>€/mes</span>
+        </div>
+      </div>
+
+      <button class="btn-primary" (click)="selectPlan(plan.id)">
+        Seleccionar Plan
+      </button>
+      
+    </div>
+
+  </div>
+</div>

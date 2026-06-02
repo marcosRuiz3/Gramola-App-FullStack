@@ -1,0 +1,228 @@
+/* You can add global styles to this file, and also import other style files */
+/* --- VARIABLES GLASSMORPHISM --- */
+:root {
+  --bg-dark: #0f172a;           /* Azul muy oscuro/negro de fondo */
+  --glass-bg: rgba(255, 255, 255, 0.07); /* Fondo blanco muy transparente */
+  --glass-border: rgba(255, 255, 255, 0.12); /* Borde sutil del cristal */
+  --lila-light: #d8b4fe;        /* Lila clarito principal */
+  --lila-dark: #a855f7;         /* Lila más oscuro para el hover */
+  --text-white: #f8fafc;        /* Blanco para textos */
+  --text-dim: #94a3b8;          /* Gris azulado para textos secundarios */
+  --radius: 20px;               /* Bordes más redondeados para el look cristal */
+}
+
+/* --- FONDO DE LA APP --- */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+  /* Degradado oscuro profundo para que el cristal destaque */
+  background: radial-gradient(circle at top right, #1e1b4b, #0f172a, #020617);
+  color: var(--text-white);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* --- CONTENEDOR EFECTO CRISTAL (Glassmorphism) --- */
+.form-container {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);    /* El desenfoque clave del cristal */
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 45px;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  margin: 20px;
+}
+
+/* --- ENCABEZADOS --- */
+.form-header {
+  color: var(--lila-light);
+  font-size: 28px;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 10px;
+  letter-spacing: -0.5px;
+}
+
+.form-subtitle {
+  color: var(--text-dim);
+  text-align: center;
+  font-size: 15px;
+  margin-bottom: 35px;
+}
+
+/* --- FORMULARIOS --- */
+.form-group {
+  margin-bottom: 22px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: var(--lila-light);
+  font-weight: 500;
+}
+
+.form-control {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 12px 15px;
+  color: white;
+  font-size: 15px;
+  box-sizing: border-box;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  outline: none;
+  background: rgba(255, 255, 255, 0.1);
+  border-color: var(--lila-light);
+  box-shadow: 0 0 15px rgba(216, 180, 254, 0.2);
+}
+
+/* --- BOTONES (Con efecto de escala y oscurecimiento) --- */
+.btn-primary {
+  width: 100%;
+  background-color: var(--lila-light);
+  color: #1e1b4b; /* Texto oscuro para contraste con el lila claro */
+  border: none;
+  padding: 15px;
+  border-radius: 12px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Animación elástica */
+  margin-top: 10px;
+}
+
+.btn-primary:hover {
+  background-color: var(--lila-dark);
+  color: white;
+  transform: scale(1.04); /* Se hace un pelín más grande */
+  box-shadow: 0 10px 20px rgba(168, 85, 247, 0.3);
+}
+
+.btn-primary:active {
+  transform: scale(0.98);
+}
+
+/* --- ENLACES --- */
+.text-center { text-align: center; margin-top: 25px; }
+
+.form-link {
+  color: var(--lila-light);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: 0.3s;
+}
+
+.form-link:hover {
+  color: white;
+  text-shadow: 0 0 8px var(--lila-light);
+}
+
+/* --- ESTADOS DE ERROR --- */
+
+/* Input con error: Borde rojizo sutil y resplandor */
+.form-control.is-invalid {
+  border-color: #f87171;
+  background: rgba(248, 113, 113, 0.05);
+  box-shadow: 0 0 10px rgba(248, 113, 113, 0.2);
+}
+
+/* Mensaje de error debajo del input */
+.error-message {
+  color: #f87171;
+  font-size: 12px;
+  margin-top: 5px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Animación de vibración para el botón si hay error */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+.shake-animation {
+  animation: shake 0.2s ease-in-out 0s 2;
+  background-color: #ef4444 !important; /* El botón se vuelve rojo brevemente */
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- TARJETAS DE PRECIOS (SELECCIÓN DE PLAN) --- */
+
+.cards-wrapper {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  flex-wrap: wrap; /* Para que bajen a la siguiente línea en móviles */
+  margin-top: 40px;
+}
+
+.plan-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 40px 30px;
+  width: 280px;
+  text-align: center;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+/* Efecto mágico al pasar el ratón */
+.plan-card:hover {
+  transform: translateY(-15px); /* La tarjeta se eleva */
+  border-color: var(--lila-light); /* El borde brilla en lila */
+  box-shadow: 0 25px 50px rgba(216, 180, 254, 0.15); /* Sombra lila */
+}
+
+.plan-title {
+  color: var(--text-white);
+  font-size: 22px;
+  font-weight: 600;
+  margin-top: 0;
+  margin-bottom: 15px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.plan-price {
+  color: var(--lila-light);
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  text-shadow: 0 0 20px rgba(216, 180, 254, 0.3); /* Resplandor en el precio */
+}
+
+/* El símbolo del euro y barra mes */
+.plan-price span {
+  font-size: 20px;
+  color: var(--text-dim);
+  font-weight: 500;
+}

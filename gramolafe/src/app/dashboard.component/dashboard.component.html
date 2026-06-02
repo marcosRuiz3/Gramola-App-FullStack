@@ -1,0 +1,285 @@
+<div class="dashboard-layout">
+  <aside class="sidebar glass-panel">
+    <div class="brand">
+      <h2 class="form-header" style="margin-bottom: 5px">La Gramola</h2>
+      <span class="badge">Propietario</span>
+    </div>
+
+    <nav class="nav-links">
+      <a
+        href="javascript:void(0)"
+        [class.active]="vistaActual === 'principal'"
+        (click)="cambiarVista('principal')"
+      >
+        🎵 Dashboard Principal
+      </a>
+
+      <a
+        href="javascript:void(0)"
+        [class.active]="vistaActual === 'historial'"
+        (click)="cambiarVista('historial')"
+      >
+        📜 Historial de hoy
+      </a>
+
+      <a [routerLink]="['/bar', miBarId]" target="_blank" class="bridge-btn">
+        📱 Vista de Clientes
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="btn-logout" (click)="logout()">Cerrar Sesión</button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header
+      class="top-header"
+      style="display: flex; justify-content: space-between; align-items: center"
+    >
+      <div>
+        <h2>{{ nombreBar }}</h2>
+        <p style="color: var(--text-dim)">Gestionando la música en directo</p>
+      </div>
+
+      @if (isSpotifyLinked) {
+        <button
+          class="btn-primary"
+          style="
+            background-color: #1db954;
+            color: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+          "
+          (click)="vincularSpotify()"
+        >
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+            <path
+              d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.54.659.3 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.84.24 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.6.18-1.2.72-1.38 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.239.54-.959.72-1.56.3z"
+            />
+          </svg>
+          Reconectar Spotify
+        </button>
+      }
+    </header>
+
+    @if (isSpotifyLinked) {
+      @if (vistaActual === 'principal') {
+        <div class="content-grid">
+          <section class="queue-section glass-panel layout-box">
+            <h3>Siguientes en sonar</h3>
+
+            <div class="queue-list">
+              @for (track of colaDeReproduccion; track track.id; let i = $index) {
+                <div
+                  class="track-item base-track"
+                  [ngClass]="{
+                    'is-playing-item': track.status === 'PLAYING',
+                    'is-paused-item': track.status === 'PAUSED',
+                  }"
+                  style="
+                    display: flex;
+                    align-items: center;
+                    padding: 10px;
+                    border-radius: 8px;
+                    margin-bottom: 8px;
+                    transition: all 0.3s ease;
+                  "
+                >
+                  <span
+                    style="
+                      color: #10b981;
+                      font-weight: bold;
+                      width: 30px;
+                      margin-right: 10px;
+                      text-align: center;
+                      font-size: 1.1rem;
+                    "
+                  >
+                    @if (track.status === 'PLAYING') {
+                      🔊
+                    } @else if (track.status === 'PAUSED') {
+                      ⏸️
+                    } @else {
+                      {{ i + 1 }}.
+                    }
+                  </span>
+
+                  <img
+                    [src]="track.albumImageUrl"
+                    alt="Carátula"
+                    style="
+                      width: 45px;
+                      height: 45px;
+                      border-radius: 6px;
+                      margin-right: 15px;
+                      object-fit: cover;
+                    "
+                  />
+
+                  <div class="track-info" style="flex-grow: 1">
+                    <span
+                      class="title"
+                      [ngStyle]="{ color: track.status === 'PLAYING' ? '#10b981' : '' }"
+                      style="font-weight: bold; display: block"
+                    >
+                      {{ track.trackName }}
+
+                      @if (track.isPaid || track.paid) {
+                        <span
+                          style="
+                            background: linear-gradient(45deg, #ffd700, #ffaa00);
+                            color: #000;
+                            font-size: 0.7rem;
+                            padding: 2px 6px;
+                            border-radius: 4px;
+                            margin-left: 8px;
+                            vertical-align: middle;
+                          "
+                          >VIP</span
+                        >
+                      }
+                    </span>
+                    <span class="artist" style="color: var(--text-dim); font-size: 0.9rem">
+                      {{ track.artist }}
+                    </span>
+                  </div>
+
+                  <span
+                    class="tag base-tag status-badge"
+                    [ngClass]="{
+                      'badge-playing': track.status === 'PLAYING',
+                      'badge-paused': track.status === 'PAUSED',
+                      'badge-pending': track.status === 'PENDING',
+                    }"
+                  >
+                    {{ track.status }}
+                  </span>
+                </div>
+              } @empty {
+                <div style="text-align: center; padding: 40px 0; color: var(--text-dim)">
+                  <p style="font-size: 2rem; margin-bottom: 10px">📭</p>
+                  <p>La cola está vacía.</p>
+                </div>
+              }
+            </div>
+          </section>
+
+          <section class="search-section glass-panel layout-box">
+            <h3>Añadir a lista base</h3>
+
+            <div class="search-bar" style="display: flex; gap: 10px; margin-bottom: 20px">
+              <input
+                type="text"
+                class="form-control"
+                placeholder="Buscar en Spotify..."
+                [(ngModel)]="searchQuery"
+                (keyup.enter)="buscarEnSpotify()"
+              />
+
+              <button
+                class="btn-primary"
+                style="padding: 10px 20px; width: auto"
+                (click)="buscarEnSpotify()"
+                [disabled]="buscando"
+              >
+                {{ buscando ? 'Buscando...' : 'Buscar' }}
+              </button>
+            </div>
+
+            <div class="search-results">
+              @for (track of resultadosBusqueda; track track.id) {
+                <div
+                  class="track-item result-track"
+                  style="display: flex; align-items: center; margin-bottom: 10px"
+                >
+                  <img
+                    [src]="track.album.images[2].url"
+                    alt="Carátula"
+                    style="width: 40px; height: 40px; border-radius: 4px; margin-right: 12px"
+                  />
+                  <div class="track-info" style="flex-grow: 1">
+                    <span class="title" style="display: block; font-weight: bold">{{
+                      track.name
+                    }}</span>
+                    <span class="artist" style="color: var(--text-dim); font-size: 0.9rem">{{
+                      track.artists[0].name
+                    }}</span>
+                  </div>
+                  <button class="btn-add" (click)="agregarCancionACola(track)">+</button>
+                </div>
+              } @empty {
+                @if (searchQuery && !buscando) {
+                  <p style="color: var(--text-dim); text-align: center; font-style: italic">
+                    Escribe una canción y dale a buscar.
+                  </p>
+                }
+              }
+            </div>
+          </section>
+        </div>
+      }
+
+      @if (vistaActual === 'historial') {
+        <app-historial></app-historial>
+      }
+    } @else {
+      <div
+        class="unlinked-warning glass-panel"
+        style="text-align: center; padding: 60px 20px; margin-top: 40px; border-radius: 15px"
+      >
+        <h3 style="font-size: 2rem; margin-bottom: 15px; color: var(--text-light)">
+          🎵 ¡Falta un último paso!
+        </h3>
+        <p
+          style="
+            color: var(--text-dim);
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+          "
+        >
+          Para poder buscar canciones y controlar la música de tu bar, necesitas dar permiso a La
+          Gramola para conectarse con tu cuenta de Spotify Premium.
+        </p>
+
+        <button
+          class="btn-primary"
+          style="
+            background-color: #1db954;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+          "
+          (click)="vincularSpotify()"
+        >
+          <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+            <path
+              d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.54.659.3 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.84.24 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.6.18-1.2.72-1.38 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.239.54-.959.72-1.56.3z"
+            />
+          </svg>
+          Conectar mi cuenta de Spotify
+        </button>
+      </div>
+    }
+  </main>
+
+  @if (isSpotifyLinked && spotifyAccessToken !== '') {
+    <app-music
+      [token]="spotifyAccessToken"
+      [autoplayUri]="uriPrimeraCancion"
+      [isVisible]="!ocultarReproductor"
+    >
+    </app-music>
+  }
+</div>

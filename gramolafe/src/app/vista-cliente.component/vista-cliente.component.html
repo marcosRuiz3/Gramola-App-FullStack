@@ -1,0 +1,277 @@
+<div class="cliente-layout" style="max-width: 800px; margin: 0 auto; padding: 20px">
+  <header
+    class="glass-panel"
+    style="text-align: center; padding: 20px; margin-bottom: 20px; border-radius: 15px"
+  >
+    <h1 style="margin: 0; color: #d4b3ff; font-size: 2rem">🎵 La Gramola</h1>
+    <p style="color: var(--text-dim); margin-top: 5px; font-size: 1.1rem">
+      ¡Pide tu canción y sáltate la cola con la Vía Rápida!
+    </p>
+  </header>
+
+  <section
+    class="search-section glass-panel"
+    style="padding: 20px; border-radius: 15px; margin-bottom: 25px"
+  >
+    <div class="search-bar" style="display: flex; gap: 10px; margin-bottom: 20px">
+      <input
+        type="text"
+        class="form-control"
+        style="
+          flex-grow: 1;
+          padding: 15px;
+          border-radius: 10px;
+          border: 1px solid rgba(212, 179, 255, 0.3);
+          background: rgba(0, 0, 0, 0.3);
+          color: white;
+          font-size: 1rem;
+        "
+        placeholder="¿Qué te apetece escuchar?..."
+        [(ngModel)]="searchQuery"
+        (keyup.enter)="buscarEnSpotify()"
+      />
+      <button
+        class="btn-primary"
+        style="
+          padding: 0 20px;
+          border-radius: 10px;
+          background-color: #1db954;
+          color: white;
+          border: none;
+          font-weight: bold;
+          cursor: pointer;
+        "
+        (click)="buscarEnSpotify()"
+        [disabled]="buscando"
+      >
+        <svg *ngIf="!buscando" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+          <path
+            d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+          />
+        </svg>
+        <span *ngIf="buscando">...</span>
+      </button>
+    </div>
+
+    <div class="search-results">
+      @for (track of resultadosBusqueda; track track.id) {
+        <div
+          class="track-item result-track"
+          style="
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            transition: background 0.3s;
+          "
+        >
+          <img
+            [src]="track.album.images[2].url"
+            alt="Carátula"
+            style="
+              width: 55px;
+              height: 55px;
+              border-radius: 8px;
+              margin-right: 15px;
+              object-fit: cover;
+            "
+          />
+
+          <div class="track-info" style="flex-grow: 1; overflow: hidden">
+            <span
+              class="title"
+              style="
+                display: block;
+                font-weight: bold;
+                font-size: 1.1rem;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+              "
+            >
+              {{ track.name }}
+              @if (track.isPaid || track.paid) {
+                <span
+                  style="
+                    background: linear-gradient(45deg, #ffd700, #ffaa00);
+                    color: #000;
+                    font-size: 0.7rem;
+                    padding: 2px 6px;
+                    border-radius: 4px;
+                    margin-left: 8px;
+                    vertical-align: middle;
+                  "
+                  >VIP</span
+                >
+              }
+            </span>
+            <span class="artist" style="color: #d4b3ff; font-size: 0.9rem">
+              {{ track.artists[0].name }}
+            </span>
+          </div>
+
+          <button
+            (click)="iniciarPagoConStripe(track)"
+            [disabled]="buscando"
+            style="
+              background: linear-gradient(135deg, #9333ea, #c084fc);
+              color: white;
+              border: none;
+              padding: 12px 18px;
+              border-radius: 25px;
+              font-weight: bold;
+              font-size: 1rem;
+              cursor: pointer;
+              box-shadow: 0 4px 15px rgba(147, 51, 234, 0.4);
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              transition:
+                transform 0.2s,
+                box-shadow 0.2s;
+              white-space: nowrap;
+            "
+            onmouseover="
+              this.style.transform = 'scale(1.05)';
+              this.style.boxShadow = '0 6px 20px rgba(147, 51, 234, 0.6)';
+            "
+            onmouseout="
+              this.style.transform = 'scale(1)';
+              this.style.boxShadow = '0 4px 15px rgba(147, 51, 234, 0.4)';
+            "
+          >
+            {{ precioCancion | number: '1.2-2' }} €
+          </button>
+        </div>
+      } @empty {
+        @if (searchQuery && !buscando) {
+          <div style="text-align: center; padding: 20px; color: var(--text-dim)">
+            <p style="font-size: 2rem; margin: 0 0 10px 0">🕵️‍♂️</p>
+            <p>No hemos encontrado esa canción. Prueba con otro artista.</p>
+          </div>
+        }
+      }
+    </div>
+  </section>
+
+  <section class="queue-section glass-panel" style="padding: 20px; border-radius: 15px">
+    <h3
+      style="
+        margin-top: 0;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        color: white;
+      "
+    >
+      Siguientes en sonar
+      <span
+        style="
+          font-size: 0.75rem;
+          background: rgba(255, 255, 255, 0.1);
+          padding: 4px 10px;
+          border-radius: 12px;
+          color: var(--text-dim);
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        "
+      >
+        En vivo 🔴
+      </span>
+    </h3>
+
+    <div class="queue-list">
+      @for (track of colaDeReproduccion; track track.id; let i = $index) {
+        <div
+          class="track-item base-track"
+          style="
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 8px;
+            background: rgba(0, 0, 0, 0.2);
+          "
+        >
+          <span
+            style="
+              color: #10b981;
+              font-weight: bold;
+              width: 35px;
+              text-align: center;
+              font-size: 1.1rem;
+            "
+          >
+            @if (track.status === 'PLAYING') {
+              🔊
+            } @else if (track.status === 'PAUSED') {
+              ⏸️
+            } @else {
+              {{ i + 1 }}
+            }
+          </span>
+
+          <img
+            [src]="track.albumImageUrl"
+            alt="Carátula"
+            style="
+              width: 45px;
+              height: 45px;
+              border-radius: 6px;
+              margin-right: 15px;
+              object-fit: cover;
+            "
+          />
+
+          <div
+            class="track-info"
+            style="flex-grow: 1; overflow: hidden; display: flex; flex-direction: column"
+          >
+            <div style="display: flex; align-items: center; gap: 8px">
+              <span
+                class="title"
+                [ngStyle]="{ color: track.status === 'PLAYING' ? '#10b981' : 'white' }"
+                style="
+                  font-weight: bold;
+                  white-space: nowrap;
+                  overflow: hidden;
+                  text-overflow: ellipsis;
+                "
+              >
+                {{ track.trackName }}
+              </span>
+
+              @if (track.isPaid === true || track.paid === true) {
+                <span
+                  style="
+                    background: linear-gradient(45deg, #ffd700, #ffaa00);
+                    color: #000;
+                    font-size: 0.65rem;
+                    padding: 3px 6px;
+                    border-radius: 4px;
+                    font-weight: 900;
+                    box-shadow: 0 0 8px rgba(255, 215, 0, 0.4);
+                    white-space: nowrap;
+                  "
+                  >VIP</span
+                >
+              }
+            </div>
+
+            <span class="artist" style="color: var(--text-dim); font-size: 0.85rem">
+              {{ track.artist }}
+            </span>
+          </div>
+        </div>
+      } @empty {
+        <div style="text-align: center; padding: 30px 0; color: var(--text-dim)">
+          <p style="font-size: 2.5rem; margin: 0 0 10px 0">💿</p>
+          <p>La pista de baile está esperando.<br />¡Anímate y pide la primera!</p>
+        </div>
+      }
+    </div>
+  </section>
+</div>

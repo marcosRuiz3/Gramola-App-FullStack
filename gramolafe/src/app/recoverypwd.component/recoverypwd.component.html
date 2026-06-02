@@ -1,0 +1,37 @@
+<div class="form-container">
+  
+  <h2 class="form-header">Recuperar Contraseña</h2>
+  <p class="form-subtitle">Seguridad de acceso para La Gramola</p>
+
+  <div *ngIf="mensajeInfo" class="alert-success">
+    {{ mensajeInfo }}
+  </div>
+
+  <div *ngIf="!token && !mensajeInfo">
+    <div class="form-group">
+      <label>Correo electrónico</label>
+      <input type="email" class="form-control" [(ngModel)]="email" placeholder="tu@email.com">
+    </div>
+    
+    <button class="btn-primary" (click)="pedirRescate()">Enviar enlace de recuperación</button>
+    
+    <div class="text-center">
+      <a routerLink="/login" class="form-link">Volver al inicio de sesión</a>
+    </div>
+  </div>
+
+  <div *ngIf="token">
+    <div class="form-group">
+      <label>Nueva Contraseña</label>
+      <input type="password" class="form-control" [(ngModel)]="newPassword" placeholder="Mínimo 4 caracteres">
+    </div>
+    
+    <div class="form-group">
+      <label>Repite la Contraseña</label>
+      <input type="password" class="form-control" [(ngModel)]="confirmPassword" placeholder="Repite la nueva contraseña">
+    </div>
+    
+    <button class="btn-primary" (click)="cambiarContrasena()">Guardar nueva contraseña</button>
+  </div>
+
+</div>

@@ -1,0 +1,307 @@
+/* --- LAYOUT PRINCIPAL (GRID) --- */
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: 250px 1fr; /* 250px para el menú, el resto para contenido */
+  grid-template-rows: 1fr 90px; /* Todo el alto disponible, menos 90px para el reproductor */
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden; /* Evita que la página entera haga scroll */
+  background-color: #0f0a18; /* Fondo muy oscuro por si la imagen tarda en cargar */
+}
+
+/* Clases comunes de Cristal */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+}
+
+.layout-box {
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius);
+  padding: 20px;
+  height: 100%;
+}
+
+/* --- 1. SIDEBAR --- */
+.sidebar {
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+  display: flex;
+  flex-direction: column;
+  padding: 30px 20px;
+  border-right: 1px solid var(--glass-border);
+}
+
+.badge {
+  background: var(--lila-light);
+  color: #000;
+  padding: 3px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.nav-links {
+  margin-top: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  flex-grow: 1;
+}
+.nav-links a {
+  color: var(--text-dim);
+  text-decoration: none;
+  padding: 10px;
+  border-radius: 8px;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.nav-links a:hover,
+.nav-links a.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-white);
+}
+.bridge-btn {
+  margin-top: 20px;
+  border: 1px dashed var(--lila-light);
+  color: var(--lila-light) !important;
+}
+
+.btn-logout {
+  background: transparent;
+  border: none;
+  color: #f87171;
+  cursor: pointer;
+  padding: 10px;
+  width: 100%;
+  text-align: left;
+}
+.btn-logout:hover {
+  background: rgba(248, 113, 113, 0.1);
+  border-radius: 8px;
+}
+
+/* --- 2. CONTENIDO CENTRAL --- */
+.main-content {
+  grid-column: 2 / 3;
+  grid-row: 1 / 2;
+  padding: 40px;
+  overflow-y: auto; /* Solo esta parte hace scroll */
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  margin-top: 20px;
+}
+
+/* Listas de canciones */
+.track-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 15px;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 8px;
+  margin-bottom: 10px;
+  transition: 0.2s;
+}
+.track-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+.track-info {
+  display: flex;
+  flex-direction: column;
+}
+.track-info .title {
+  color: var(--text-white);
+  font-weight: 500;
+}
+.track-info .artist {
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+/* Etiquetas Premium vs Base */
+.tag {
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: bold;
+}
+.premium-track {
+  border-left: 3px solid #10b981;
+} /* Verde para pagadas */
+.premium-tag {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981;
+}
+.base-track {
+  border-left: 3px solid var(--lila-light);
+} /* Lila para gratis */
+.base-tag {
+  background: rgba(216, 180, 254, 0.2);
+  color: var(--lila-light);
+}
+
+.btn-add {
+  background: var(--lila-light);
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  color: #000;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/* --- 3. REPRODUCTOR --- */
+.player-bar {
+  grid-column: 1 / 3;
+  grid-row: 2 / 3;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 30px;
+  border-top: 1px solid var(--glass-border);
+  z-index: 10;
+}
+
+.now-playing {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  width: 250px;
+}
+.album-placeholder {
+  width: 50px;
+  height: 50px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+}
+
+.player-controls {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 500px;
+}
+.buttons {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  margin-bottom: 8px;
+}
+.control-btn {
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 20px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+.control-btn:hover {
+  color: var(--text-white);
+}
+.play-btn {
+  background: var(--text-white);
+  color: #000;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 18px;
+}
+.play-btn:hover {
+  transform: scale(1.05);
+  color: #000;
+}
+
+.progress-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+}
+.time {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.bar-bg {
+  flex-grow: 1;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 5px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.bar-fill {
+  height: 100%;
+  background: var(--lila-light);
+  transition: width 0.1s linear;
+}
+
+.volume-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 200px;
+  justify-content: flex-end;
+}
+
+/* =========================================
+   ESTILOS DINÁMICOS PARA LA COLA
+========================================= */
+
+/* Fila de la canción que está sonando */
+.is-playing-item {
+  background: rgba(16, 185, 129, 0.1) !important; /* Un fondo verde muy sutil */
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  transform: scale(1.02); /* La hace un pelín más grande para destacar */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* Fila de la canción pausada */
+.is-paused-item {
+  background: rgba(255, 165, 0, 0.05) !important; /* Un fondo naranja muy sutil */
+  border: 1px solid rgba(255, 165, 0, 0.2);
+  opacity: 0.8; /* Se ve un poco apagada porque está en pausa */
+}
+
+/* Insignias (Badges) de Estado a la derecha */
+.status-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+}
+
+.badge-playing {
+  background: rgba(16, 185, 129, 0.2);
+  color: #10b981; /* Verde Spotify */
+  border: 1px solid rgba(16, 185, 129, 0.4);
+}
+
+.badge-paused {
+  background: rgba(255, 165, 0, 0.2);
+  color: #ffa500; /* Naranja */
+  border: 1px solid rgba(255, 165, 0, 0.4);
+}
+
+.badge-pending {
+  background: rgba(255, 255, 255, 0.1);
+  color: #a0a0a0; /* Gris */
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}

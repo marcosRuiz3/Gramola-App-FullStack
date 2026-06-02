@@ -1,0 +1,39 @@
+<div class="form-container" style="max-width: 450px">
+  <h2 class="form-header">Suscripción a la Gramola</h2>
+  <p class="form-subtitle">Pago seguro cifrado mediante Stripe</p>
+
+  <button class="btn-primary" (click)="prepay()" style="margin-bottom: 25px">
+    Ir al pago seguro
+  </button>
+
+  <form id="payment-form" style="display: none">
+    <div class="form-group">
+      <label>Datos de la tarjeta</label>
+      <div
+        id="card-element"
+        class="form-control"
+        style="padding: 16px 15px; min-height: 20px"
+      ></div>
+    </div>
+
+    <div
+      id="card-error"
+      class="error-message"
+      role="alert"
+      style="margin-bottom: 15px; display: empty"
+    ></div>
+
+    <button id="submit" class="btn-primary">
+      <div class="spinner hidden" id="spinner"></div>
+      <span id="button-text">Pagar ahora</span>
+    </button>
+
+    <div class="result-message hidden alert-success" style="margin-top: 20px">
+      ✅ ¡Pago realizado con éxito!
+      <br /><br />
+      <a href="" target="_blank" style="color: #065f46; font-weight: bold"
+        >Ver tu recibo en Stripe</a
+      >. Actualiza la página para continuar.
+    </div>
+  </form>
+</div>
